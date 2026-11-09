@@ -14,7 +14,7 @@ Install Rust and the [Tauri system prerequisites](https://v2.tauri.app/start/pre
 
 For an installer, install the Tauri CLI with `cargo install tauri-cli --version '^2' --locked`, then run `cargo tauri build`. Installers are in `target/release/bundle/`.
 
-For macOS, build on a Mac with the same command. The `.app` and `.dmg` are in `target/release/bundle/`. Building macOS bundles directly on Windows is not supported; a macOS CI runner can do it.
+For macOS, build on a Mac with the same command. The `.app` and `.dmg` are in `target/release/bundle/`. Building macOS bundles directly on Windows is not supported; the included GitHub Actions workflow uses a macOS runner to build a universal DMG for Apple Silicon and Intel Macs.
 
 The included GitHub Actions workflow builds Windows and macOS artifacts when manually triggered or when a `v*` tag is pushed. GitHub Actions must be enabled in the repository.
 

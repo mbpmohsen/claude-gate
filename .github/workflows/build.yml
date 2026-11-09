@@ -21,10 +21,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - name: Build desktop app
-        run: |
-          cargo install tauri-cli --version '^2' --locked
-          cargo tauri build --ci --no-sign
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli --version '^2' --locked
+      - name: Build Windows app
+        if: matrix.name == 'windows'
+        run: cargo tauri build --ci --no-sign
+      - name: Add macOS targets
+        if: matrix.name == 'macos'
+        run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
+      - name: Build universal macOS app
+        if: matrix.name == 'macos'
+        run: cargo tauri build --ci --no-sign --target universal-apple-darwin
       - name: Collect Windows downloads
         if: matrix.name == 'windows'
         shell: pwsh
@@ -37,7 +44,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p release
-          find target/release/bundle -type f -name '*.dmg' -exec cp {} release/ \;
+          find target/universal-apple-darwin/release/bundle -type f -name '*.dmg' -exec cp {} release/ \;
       - uses: actions/upload-artifact@v4
         with:
           name: claude-gate-${{ matrix.name }}
