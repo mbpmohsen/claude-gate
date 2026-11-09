@@ -1,0 +1,60 @@
+name: Build and release
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: windows
+          - os: macos-15
+            name: macos
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build desktop app
+        run: |
+          cargo install tauri-cli --version '^2' --locked
+          cargo tauri build --ci --no-sign
+      - name: Collect Windows downloads
+        if: matrix.name == 'windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path release -Force | Out-Null
+          Copy-Item target/release/claude-gate.exe release/Claude-Gate-Windows.exe
+          Get-ChildItem target/release/bundle -Recurse -File | Where-Object { $_.Extension -in '.msi','.exe' } | Copy-Item -Destination release
+      - name: Collect macOS downloads
+        if: matrix.name == 'macos'
+        shell: bash
+        run: |
+          mkdir -p release
+          find target/release/bundle -type f -name '*.dmg' -exec cp {} release/ \;
+      - uses: actions/upload-artifact@v4
+        with:
+          name: claude-gate-${{ matrix.name }}
+          path: release/*
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: claude-gate-*
+          path: release
+          merge-multiple: true
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${GITHUB_REF_NAME}" release/* --repo "${GITHUB_REPOSITORY}" --generate-notes --title "Claude Gate ${GITHUB_REF_NAME}"

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Claude Gate",
+  "version": "0.1.0",
+  "identifier": "app.claudegate.desktop",
+  "build": { "frontendDist": "ui" },
+  "app": {
+    "windows": [{ "title": "Claude Gate", "width": 980, "height": 700, "minWidth": 520, "minHeight": 520, "center": true, "backgroundColor": "#F7F3EC" }],
+    "withGlobalTauri": true,
+    "security": { "csp": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:" }
+  },
+  "bundle": { "active": true, "targets": "all", "icon": ["icons/icon.png", "icons/icon.ico", "icons/icon.icns"] }
+}

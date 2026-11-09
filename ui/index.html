@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude Gate</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <div class="brand"><img src="gate.svg" alt=""/><bdi>Claude Gate</bdi><small>یک میانبر مستقل برای Claude</small><button id="settings-open" class="settings-link">تنظیمات</button></div>
+    <section class="card" aria-live="polite">
+      <div class="orb"><span class="spark">✳</span><span class="ring"></span></div>
+      <div class="eyebrow" id="eyebrow">در حال بررسی اتصال</div>
+      <h1 id="title">یک لحظه صبر کنید…</h1>
+      <p id="description">موقعیت IP عمومی شما بررسی می‌شود تا Claude در زمان مناسب باز شود.</p>
+      <button id="action" hidden>بررسی دوباره</button>
+      <div class="progress" id="progress"><span></span></div>
+    </section>
+    <section class="settings" id="settings" hidden>
+      <button id="settings-close" class="settings-link">بستن</button>
+      <h2>تنظیمات</h2>
+      <label class="option"><input id="web-enabled" type="checkbox"> محافظت هنگام باز کردن claude.ai در مرورگر</label>
+      <p>برای این قابلیت، افزونهٔ همراه را نیز در Chrome یا Edge نصب کنید. تنظیم این بخش فقط ترجیح شما را ثبت می‌کند؛ فعال‌سازی و خاموش‌کردن محافظ وب از داخل افزونه انجام می‌شود.</p>
+      <p>در صفحهٔ افزونه‌های مرورگر، Developer mode را روشن کنید و پوشهٔ <code dir="ltr">browser-extension</code> را با Load unpacked انتخاب کنید.</p>
+    </section>
+    <footer>بررسی فقط هنگام باز کردن برنامه انجام می‌شود. این برنامه رسمی Anthropic نیست.</footer>
+  </main>
+</body>
+</html>
